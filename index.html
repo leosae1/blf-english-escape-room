@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escape the Exam Room · BLF English</title>
+<style>
+:root{color-scheme:dark;--bg:#101720;--panel:#192632;--line:#536779;--ink:#f5f7fa;--muted:#c0ceda;--mint:#9cf0ce;--gold:#ffd98e}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#1c3541,var(--bg) 65%) fixed;color:var(--ink);font:1rem/1.55 system-ui,sans-serif;min-height:100vh}
+.shell{max-width:57rem;margin:auto;padding:0 clamp(1rem,4vw,2.5rem)}header{border-bottom:1px solid var(--line);background:#101720}header .shell{display:flex;justify-content:space-between;align-items:center;gap:.75rem;min-height:4rem}.brand,.eyebrow,.timer,.digit{font-family:ui-monospace,monospace;font-weight:750}.brand,.eyebrow{color:var(--mint);letter-spacing:.075em}.timer{font-size:1.3rem;white-space:nowrap}main{padding-block:clamp(1.3rem,5vw,3.5rem) 3rem}h1,h2,p{margin-top:0}h1{font-size:clamp(2rem,7vw,4.3rem);line-height:1.03;letter-spacing:-.045em;margin-bottom:1rem}h2{font-size:1.15rem}p{max-width:65ch}.intro{font-size:1.12rem;color:var(--muted)}.brief,.notebook,.reward,.question,.status:not(:empty){padding:clamp(.9rem,3vw,1.35rem);border:1px solid var(--line);border-radius:.8rem;background:var(--panel);margin:1rem 0}.notebook,.reward{border-left:.3rem solid var(--mint)}.notebook p,.status p:last-child{margin-bottom:0}.question{min-width:0;padding-top:.5rem}.question legend{font-weight:750;padding:0 .35rem;max-width:100%}.source{white-space:pre-line;color:var(--muted);margin-bottom:.75rem}.choice{display:flex;align-items:flex-start;gap:.65rem;min-height:44px;padding:.65rem;border:1px solid var(--line);border-radius:.45rem;margin:.45rem 0;cursor:pointer}.choice:has(:checked){border-color:var(--mint);background:#243b3d}input[type=radio]{flex:none;margin:.3rem 0 0;accent-color:var(--mint);width:1.1rem;height:1.1rem}.sort{display:flex;flex-wrap:wrap;gap:.6rem}.sort label{display:grid;gap:.2rem;flex:1 1 5rem}select,.code{min-height:44px;padding:.45rem;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:.4rem;font:inherit}.code{display:block;width:100%;max-width:16rem;margin:.35rem 0 1rem;font-family:ui-monospace,monospace;font-size:1.4rem;letter-spacing:.25em}button{font:inherit;font-weight:750;min-height:44px;padding:.65rem 1.2rem;border:0;border-radius:.5rem;background:var(--mint);color:#10221f;cursor:pointer}.status{color:var(--gold)}.expired{color:var(--gold);padding-top:.8rem}.digits{display:flex;flex-wrap:wrap;gap:.4rem;list-style:none;padding:0;margin:.4rem 0 1.35rem}.digit{display:grid;place-items:center;width:2rem;height:2rem;border:1px solid var(--line);border-radius:.35rem;color:var(--mint);background:var(--bg)}.progress{color:var(--muted);margin-bottom:0}.receipt{color:var(--mint);font-size:1.5rem;font-weight:750}button:hover{background:#c4ffe6}:focus-visible{outline:3px solid var(--gold);outline-offset:3px}h1:focus,.status:focus{outline:none}[hidden]{display:none!important}
+</style>
+<header><div class="shell"><span class="brand">BLF ENGLISH · CLASS 10</span><span id="timer" class="timer" role="timer" aria-label="Time remaining">35:00</span></div></header>
+<main class="shell">
+<p id="expired" class="expired" role="status" hidden>Time is up. You can keep playing and unlock the door.</p>
+<section id="vault" aria-label="Collected code digits" hidden>
+<p id="progress" class="progress"></p><ol id="digits" class="digits"></ol>
+</section>
+<section id="screen">
+<p class="eyebrow">WRITING ESCAPE ROOM</p>
+<h1>Escape the Exam Room</h1>
+<p class="intro">The exam room is locked. Recover six digits by solving six writing missions, then enter the code on the door.</p>
+<div class="brief"><h2>Before you start</h2>
+<ul><li>Get your notebook ready. Use your text-type notes if you need them.</li><li>Write the short notebook task in each mission. Check the other answers on screen.</li><li>Record each digit in mission order. After a wrong attempt, use the hint and try again.</li><li>You have 35 minutes. Keep this tab open and finish even if time runs out.</li></ul></div>
+<button id="start" type="button">Start the timer</button>
+</section>
+<noscript><p>Enable JavaScript in your browser to play.</p></noscript>
+</main>
+<script>
+const missions = [
+  {
+    type: "Article", title: "The editor’s desk", digit: "7",
+    context: "Last week, lessons started 20 minutes later than usual. Fewer students were late for school. But after-school clubs also finished later, so some students missed their bus home. The school magazine wants to tell students and families what happened.",
+    questions: [
+      {prompt:"1. Which opening introduces both sides of the story for school magazine readers?", choices:[
+        "I tried a later start last week. Would you do it too? Tell me below.",
+        "A later start helped more students arrive on time. But what happened to students who had a bus to catch after their club?",
+        "The school should introduce later starts immediately because punctuality matters most.",
+        "We are writing to enquire whether the after-school bus timetable can be revised."
+      ], answer:1, hints:["Think about what families who missed the news need to know.","Look for an opening that brings both reported outcomes into the same story."]},
+      {prompt:"2. Put the article sentences in order. Start with the question the school wanted to answer.", source:"A. That was good news, but club members now had less time to catch the bus.\nB. To find out, the school began lessons 20 minutes later for one week.\nC. Could a later start cut the number of late arrivals?\nD. During the trial, fewer students arrived late.", order:["C","B","D","A"], hints:["Check which sentence can stand first without pointing back.","‘To find out’ follows a question. Before ‘That was good news’, look for the result."]}
+    ],
+    writing:"Write a headline and the first two sentences of your article. Tell readers what changed in the morning and what went wrong after school. Try to make them curious. Use your own words."
+  },
+  {
+    type:"Blog Post", title:"The silent feed", digit:"3",
+    context:"During your school exchange, you left your phone in your bag at lunch. You talked to someone new. Now you want to share the experience with other exchange students.",
+    questions:[
+      {prompt:"1. A draft ends like this. Which text and which part does it fit best?", source:"What about you? Has putting your phone away ever helped you meet someone? Tell me in the comments.", choices:[
+        "An article opening that introduces the results of a school project.",
+        "A private email ending that asks one friend to write back.",
+        "A statement ending that asks the school to change a rule.",
+        "A blog ending that invites readers to share their own experiences."
+      ], answer:3, hints:["Think about what this particular audience could contribute.","A targeted question gives readers something specific to share from their own experience."]},
+      {prompt:"2. Which word or phrase fits the gap?",source:"I expected the silence to be awkward. ____ I ended up talking to someone new.",choices:[
+        "In other words,",
+        "Instead,",
+        "As a result,",
+        "For instance,"
+      ],answer:1,hints:["Separate what the writer predicted from what actually happened.","The writer expected silence but actually had a conversation."]}
+    ],
+    writing:"Write two sentences for the middle of your blog post. Describe one moment at lunch and say how it changed the way you felt. You can invent the details."
+  },
+  {
+    type:"Informal Email", title:"The missing reply", digit:"8",
+    context:"Your friend Maya wrote, “Can you still come on Saturday? I’m worried I’ll have to set up the stall by myself.” You can arrive at 11, but the stall opens at 10.",
+    questions:[
+      {prompt:"1. Which reply sounds like a friend and offers help Maya can actually use?",choices:[
+        "I get why you’re worried. I can’t make it until 11. Could I help you pack everything on Friday so there’s less to do before opening?",
+        "Don’t worry, I’ll be there for the opening. I’ll probably get there around 11.",
+        "I regret to inform you that I will be unable to attend at 10. Please arrange adequate assistance.",
+        "I’m coming at 11. You managed last time, so I’m sure it’s fine."
+      ],answer:0,hints:["Maya tells you when she needs help and how she feels.","The stall opens before you arrive. Which reply offers help that is possible before opening?"]},
+      {prompt:"2. Which line would you change because it sounds too formal for Maya?",source:"Hi Maya,\nThanks for asking me!\nI look forward to receiving your response at your earliest convenience.\nSee you on Saturday!",choices:["Hi Maya,","Thanks for asking me!","I look forward to receiving your response at your earliest convenience.","See you on Saturday!"],answer:2,hints:["Read each line as if you were speaking to a friend.","Which line sounds like a business letter asking for a reply?"]}
+    ],
+    writing:"Rewrite “I look forward to receiving your response at your earliest convenience” as a friendly request for a reply. Add a second sentence offering help before the stall opens."
+  },
+  {
+    type:"Formal Email", title:"The inbox filter", digit:"1",
+    context:"You are emailing Ms Patel, the coordinator of a youth conference. Your confirmation email has arrived, but the attached timetable will not open. You need the timetable by Thursday to arrange transport.",
+    questions:[
+      {prompt:"1. Choose the subject line that identifies the event and the action you need.",choices:[
+        "Urgent!!!",
+        "Youth conference confirmation received",
+        "Complaint about broken files",
+        "Youth conference: request for a readable timetable"
+      ],answer:3,hints:["Think about what Ms Patel could tell without opening the message.","The subject should distinguish your request from a booking query or a general complaint."]},
+      {prompt:"2. A student has made a mistake in this request. Which version fixes the question and keeps the meaning?",source:"Could you tell me when will you send another copy? I need it by Thursday to arrange transport.",choices:[
+        "Could you tell me when you will send another copy? I need it by Thursday to arrange transport.",
+        "Could you tell me when you will send another copy? I can arrange transport by Thursday.",
+        "Could you tell me when will you send another copy? I need it by Thursday to arrange transport.",
+        "Send over another copy by Thursday. I need to sort out my ride."
+      ],answer:0,hints:["Check the word order after ‘tell me’ and whose action has a deadline.","An embedded question uses statement word order. Thursday is the deadline for receiving the file."]}
+    ],
+    writing:"Write a greeting for Ms Patel. In two sentences, explain what went wrong with the timetable and politely ask for a new copy. Say when and why you need it."
+  },
+  {
+    type:"Formal Letter", title:"On the record", digit:"6",
+    context:"Write a printed letter to the council’s Transport Services department. You do not know the recipient’s name. At the East Gate stop, the 16:10 bus was cancelled twice last week, leaving students waiting until 16:40. Use standard British formal-letter conventions.",
+    questions:[
+      {prompt:"1. Which greeting and ending go together in this British letter?", choices:[
+        "Dear Sir or Madam / Yours sincerely",
+        "Dear Sir or Madam / Yours faithfully",
+        "Dear Ms Patel / Yours faithfully",
+        "Dear Ms Patel / Yours sincerely"
+      ],answer:1,hints:["Check whether you can address the recipient by name.","Use the British sign-off convention for an unnamed recipient."]},
+      {prompt:"2. A draft says, ‘Your buses are always late!’ Which replacement gives the facts and asks the council to act?", choices:[
+        "The 16:10 bus is never reliable. Please replace the entire service.",
+        "Two buses were cancelled, proving that the council ignored students. An apology is required.",
+        "The 16:10 service was cancelled twice last week, leaving students waiting until 16:40. Please explain how cancellations are communicated and review the service at that time.",
+        "Some students once waited for a bus. Your department should be more responsible."
+      ],answer:2,hints:["Check which claims are supported by the information in the brief.","Keep the observed frequency and the consequence. Then ask for a response the department can act on."]}
+    ],
+    writing:"Finish the letter in two sentences. Suggest one way to tell students when a bus is cancelled. Politely ask what the council plans to do."
+  },
+  {
+    type:"Comment / Statement", title:"The final argument", digit:"4",
+    context:"The school council proposes a ban on all phone use at lunch. Thirty students chose to answer a survey. Eighteen said phone messages distracted them. Some students use phones to arrange travel home. The task reads: “Assess whether the council should ban phones at lunch and justify your recommendation.”",
+    questions:[
+      {prompt:"1. What do ‘assess’ and ‘justify’ ask you to do in this statement?", choices:[
+        "Describe the rule and list who would have to follow it.",
+        "Summarise both views and end without taking a position.",
+        "Announce a verdict, then repeat it in different words.",
+        "Weigh likely benefits and drawbacks, then reach a judgement supported by reasons."
+      ],answer:3,hints:["Look at the verbs ‘assess’ and ‘justify’. Each demands a different move.","An assessment weighs the case. A justification gives reasons for the resulting judgement."]},
+      {prompt:"2. Which paragraph uses the survey fairly and considers students who need their phones?",choices:[
+        "The poll proves that most students support a ban, so travel arrangements are irrelevant.",
+        "The poll suggests distraction is a concern among respondents. A phone-free seating area could reduce interruptions while still letting students arrange travel elsewhere.",
+        "Because the poll was voluntary, distraction cannot be a real problem.",
+        "Students need phones for travel, so there is no reason to discuss distraction."
+      ],answer:1,hints:["The poll concerns distraction and covers a voluntary group. It did not measure support for the ban.","Look for a response that limits the claim to the evidence and still takes the travel objection seriously."]}
+    ],
+    writing:"Write three sentences for the school council. Say what rule you would choose. Use the survey to support or question a ban. Explain how your rule would affect students who need to arrange a lift home."
+  }
+];
+
+const screen = document.querySelector("#screen");
+const timer = document.querySelector("#timer");
+const vault = document.querySelector("#vault");
+const digits = document.querySelector("#digits");
+const progress = document.querySelector("#progress");
+const expired = document.querySelector("#expired");
+const finalCode = missions.map(mission => mission.digit).join("");
+let deadline, ticker, remaining = 35 * 60, solved = 0;
+
+function updateTimer() {
+  remaining = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+  const minutes = String(Math.floor(remaining / 60)).padStart(2, "0");
+  const seconds = String(remaining % 60).padStart(2, "0");
+  timer.textContent = minutes + ":" + seconds;
+  if (remaining === 0) {
+    clearInterval(ticker);
+    expired.hidden = false;
+  }
+}
+
+function updateVault() {
+  progress.textContent = solved + " of " + missions.length + " digits recovered";
+  digits.innerHTML = missions.map((mission, index) => {
+    const value = index < solved ? mission.digit : "–";
+    const label = "Mission " + (index + 1) + ": " + (index < solved ? value : "locked");
+    return '<li class="digit" aria-label="' + label + '">' + value + '</li>';
+  }).join("");
+}
+
+function show(content) {
+  screen.innerHTML = content;
+  screen.querySelector("h1").focus();
+  window.scrollTo(0, 0);
+}
+
+function renderQuestion(question, index) {
+  const source = question.source ? '<p class="source">' + question.source + '</p>' : "";
+  const controls = question.order
+    ? '<div class="sort">' + question.order.map((_, slot) => '<label>Position ' + (slot + 1) +
+      '<select name="q' + index + '" required><option value="">Choose</option>' +
+      ["A","B","C","D"].map(letter => '<option>' + letter + '</option>').join("") +
+      '</select></label>').join("") + '</div>'
+    : question.choices.map((choice, option) => '<label class="choice"><input type="radio" name="q' + index +
+      '" value="' + option + '" required><span>' + choice + '</span></label>').join("");
+  return '<fieldset class="question"><legend>' + question.prompt + '</legend>' + source + controls + '</fieldset>';
+}
+
+function renderMission() {
+  const mission = missions[solved];
+  const misses = mission.questions.map(() => 0);
+  show('<p class="eyebrow">MISSION ' + (solved + 1) + ' / ' + missions.length +
+    '</p><h1 tabindex="-1">' + mission.title + '</h1><p class="intro">' + mission.context +
+    '</p><form>' + mission.questions.map(renderQuestion).join("") +
+    '<button>Check answers</button><div class="status" aria-live="polite" tabindex="-1"></div></form>');
+  const form = screen.querySelector("form");
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+    const data = new FormData(form);
+    const feedback = [];
+    mission.questions.forEach((question, index) => {
+      const answers = data.getAll("q" + index);
+      if (question.order && new Set(answers).size !== question.order.length) {
+        feedback.push("Question " + (index + 1) + ": use each letter once.");
+        return;
+      }
+      const correct = question.order
+        ? question.order.every((letter, slot) => letter === answers[slot])
+        : answers[0] === String(question.answer);
+      if (!correct) {
+        const hint = question.hints[Math.min(misses[index], question.hints.length - 1)];
+        misses[index]++;
+        feedback.push("Question " + (index + 1) + " · Hint " + Math.min(misses[index], question.hints.length) + ": " + hint);
+      }
+    });
+    if (feedback.length) {
+      const status = form.querySelector(".status");
+      status.innerHTML = feedback.map(message => "<p>" + message + "</p>").join("");
+      status.focus();
+      return;
+    }
+    solved++;
+    updateVault();
+    show('<p class="eyebrow">MISSION ' + solved + ' / ' + missions.length +
+      '</p><h1 tabindex="-1">Lock opened</h1><div class="reward"><p class="receipt">Digit ' + solved + ': ' +
+      mission.digit + '</p><p>Record your digit. Then complete the writing task before moving on.</p></div><aside class="notebook"><h2>' + mission.type + ' · Write in your notebook</h2><p class="source">' + mission.context + '</p><p>' +
+      mission.writing + '</p></aside><button type="button">' + (solved < missions.length ? "Next mission" : "Go to the final lock") + '</button>');
+    screen.querySelector("button").addEventListener("click", solved < missions.length ? renderMission : renderLock);
+  });
+}
+
+function renderLock() {
+  show('<p class="eyebrow">FINAL LOCK</p><h1 tabindex="-1">Open the door</h1><p class="intro">Use the digits in mission order.</p>' +
+    '<form><label for="code">Six-digit code</label><input class="code" id="code" inputmode="numeric" autocomplete="off" required>' +
+    '<button>Unlock the door</button><div class="status" aria-live="polite" tabindex="-1"></div></form>');
+  screen.querySelector("form").addEventListener("submit", event => {
+    event.preventDefault();
+    const entry = screen.querySelector("#code").value.trim();
+    if (entry !== finalCode) {
+      const status = screen.querySelector(".status");
+      status.textContent = /^[0-9]{6}$/.test(entry)
+        ? "The door is still locked. Check the order of your digits."
+        : "Enter six digits in a row.";
+      status.focus();
+      return;
+    }
+    updateTimer();
+    clearInterval(ticker);
+    show('<p class="eyebrow">ALL SIX LOCKS OPEN</p><h1 tabindex="-1">You escaped!</h1><p class="intro">' +
+      (remaining ? "Time left when you escaped: " + timer.textContent + "." : "You kept going after the timer reached zero.") +
+      '</p><p>Keep your notebook responses ready for the class discussion.</p>');
+  });
+}
+
+document.querySelector("#start").addEventListener("click", () => {
+  deadline = Date.now() + 35 * 60 * 1000;
+  updateTimer();
+  ticker = setInterval(updateTimer, 250);
+  vault.hidden = false;
+  updateVault();
+  renderMission();
+});
+</script>
+</html>
